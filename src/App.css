@@ -43,6 +43,126 @@
   padding: 15px; 
 }
 
+.form-control {
+  width: 100% !important;
+  height: 15% !important;
+  font-size: 100%;
+  box-sizing: border-box;
+  border: 3px solid #CACACA;
+}
+
+.react-tel-input{
+  width: 100% !important;
+  height: 15% !important;
+  margin-top: 5px;
+  margin-bottom: 15px !important;
+  border: 3px solid #CACACA;
+  border-radius: 3px;
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  background-color: #222;
+  padding: 17px 60px;
+  margin: auto;
+  margin-top: 5%;
+  box-shadow: 0 5px 15px rgba(189, 25, 25, 0.2);
+}
+
+button span {
+  position: relative; 
+  z-index: 1;
+}
+
+button:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 490%;
+  width: 140%;
+  background: #6e9296;
+  -webkit-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+  transform: translateX(-98%) translateY(-18%) rotate(45deg);
+}
+
+button:hover:after {
+  -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+  transform: translateX(-9%) translateY(-25%) rotate(45deg);
+}
+
+button:active {
+  box-shadow: 0px 4px rgb(28, 13, 61);
+  transform: translateY(2px);
+}
+
+jdiv .label_39 {
+  display: none !important
+}   
+.globalClass_ET jdiv .__jivoMobileButton{
+  display: none !important
+}
+
+.header_2u {
+  position: static !important;
+}
+
+.avatar_2c {
+  padding-left: 10px !important;
+}
+
+.main_2l {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  right: 0% !important;
+}
+
+textarea.inputField_2G:focus {
+  min-width: 100% !important;
+}
+
+.input_6h {
+  width: 100% !important;
+}
+
+.body_2s {
+  width: 100% !important;
+}
+
 .control-error {
   border: 2px solid red;
+}
+
+#startChatButtonError {
+  font-weight: bold;
+  text-align: center;
+  margin-top: 15px;
+  padding-top: 5px;
+  height: 45px;
+  width: 70%;
+  font-size: large;
+  color: rgb(68, 58, 59);
+  background-color: rgb(214, 100, 100);
+  margin-left: 15%;
+  margin-right: 15%;
+  border-radius: 25px;
+}
+
+#errorMessageChatOffline {
+  display:block;
+  padding-top: 4px;
 }

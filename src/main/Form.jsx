@@ -145,21 +145,23 @@ class App extends Component {
   formSendProactiveInvitation = () => {
 
     var clientName = window.jivo_api.getContactInfo().client_name;
-
     window.jivo_api.showProactiveInvitation('Hello, dear ' + clientName + '! How can I help you today?')
 
   }
 
   startChat = () => {
-    if (window.varStatus === "offline") {
+    var varStatus = window.jivo_api.chatMode(); console.log(varStatus);
+    if (varStatus === "offline") {
       var errorText = window.document.getElementById("startChatButtonError")
-      this.setState({...this.state, showError:true});
+      this.setState({...this.state, showError:true})
+      setTimeout(() => {this.setState({...this.state, showError:false})}, 2000)
+      window.jivo_init()
     }
-    else if (window.varStatus === "online") {
+    else if (varStatus === "online") {
       this.formSubmitHandler()
       this.formSendDataToChat()
       this.formSendProactiveInvitation()
-      this.setState({...this.state, showError:false});
+      this.setState({...this.state, showError:false})
     }
     else { alert("erro")}
   }
@@ -177,9 +179,15 @@ class App extends Component {
       console.log("deu ruim")
     });
     document.body.appendChild(script);*/
-
-    console.log(window.jivo_api.chatMode())
   }
+
+  /*loadChat = () => {
+    var jivoScript = document.createElement('script');
+    jivoScript.setAttribute('src','//code.jivosite.com/widget.js');
+    jivoScript.setAttribute('async', false);
+    jivoScript.setAttribute('jv-id', 'Kh0FkGNmss');
+    document.head.appendChild(jivoScript);
+  }*/
 
   render() {
 
@@ -235,7 +243,9 @@ class App extends Component {
         </button>
 
         {this.state.showError && <div id="startChatButtonError">
-          test
+          <span id="errorMessageChatOffline">
+          We're currently offline. Please try again later.
+          </span>
         </div>}
 
       </div>
