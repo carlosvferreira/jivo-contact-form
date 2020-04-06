@@ -7,30 +7,16 @@ import Email from '../components/Email';
 import Select from '../components/Select';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-import {chatStatus} from '../services/chatStatus';
-
-function new_script(src) {
-  return new Promise(function(resolve, reject){
-    var script = window.document.createElement('script');
-    script.src = "//code.jivosite.com/widget/7LAU20v48r";
-    script.addEventListener('load', function () {
-      console.log("oi")
-      resolve();
-    });
-    script.addEventListener('error', function (e) {
-      reject(e);
-    });
-    window.document.body.appendChild(script);
-  })
-};
 
 class App extends Component {
-
 
   constructor() {
     super();
 
     this.state = {
+      chatStatus: false,
+      error: false,
+      isLoading: true,
       showError: false,
       formIsValid: false,
       formControls: {
@@ -79,14 +65,6 @@ class App extends Component {
       }
 
     }
-
-  }
-
-  handleLoad = () => {
-
-    console.log(window)
-    console.log(window.jivo_api.chatMode())
-    console.log("test")
 
   }
 
@@ -150,44 +128,31 @@ class App extends Component {
   }
 
   startChat = () => {
-    var varStatus = window.jivo_api.chatMode(); console.log(varStatus);
-    if (varStatus === "offline") {
-      var errorText = window.document.getElementById("startChatButtonError")
+    if (this.state.chatStatus) {  
+      this.formSubmitHandler()
+      this.formSendProactiveInvitation()
+    }
+    else if (!this.state.chatStatus) {
       this.setState({...this.state, showError:true})
       setTimeout(() => {this.setState({...this.state, showError:false})}, 2000)
       window.jivo_init()
     }
-    else if (varStatus === "online") {
-      this.formSubmitHandler()
-      this.formSendDataToChat()
-      this.formSendProactiveInvitation()
-      this.setState({...this.state, showError:false})
-    }
-    else { alert("erro")}
+    else {this.setState({...this.state, chatStatus: false, isLoading: true, error: true})}
   }
 
-  componentDidMount() {
-    /*var script = document.createElement('script');
-    script.src = "//code.jivosite.com/widget/7LAU20v48r";
-    script.onload = () => {
-      console.log(window.jivo_api.chatMode())
-    }
-    script.addEventListener('load', function () {
-      console.log("oi")
-    });
-    script.addEventListener('error', function (e) {
-      console.log("deu ruim")
-    });
-    document.body.appendChild(script);*/
-  }
+  async componentDidMount() {
+    try {
+      const status = await fetch("http://node136.jivosite.com/widget/status/497422/ZLM6UIaTWf")
+      const response = await status.json()
+      const isOnline = Boolean(response.agents && response.agents.length)
 
-  /*loadChat = () => {
-    var jivoScript = document.createElement('script');
-    jivoScript.setAttribute('src','//code.jivosite.com/widget.js');
-    jivoScript.setAttribute('async', false);
-    jivoScript.setAttribute('jv-id', 'Kh0FkGNmss');
-    document.head.appendChild(jivoScript);
-  }*/
+      this.setState({...this.state, chatStatus: isOnline, isLoading: false})
+      console.log(isOnline)
+    }
+    catch(e) {
+      this.setState({...this.state, chatStatus: false, isLoading: true, error: true})
+    }
+  }
 
   render() {
 
@@ -195,61 +160,62 @@ class App extends Component {
 
       <div className="App">
 
-        <Name name="name"
-          placeholder={this.state.formControls.name.placeholder}
-          value={this.state.formControls.name.value}
-          onChange={this.changeHandler}
-          touched={this.state.formControls.name.touched}
-          valid={this.state.formControls.name.valid}
-        />
+        {this.state.isLoading && <p>Loading, please wait</p>}
+        {!this.state.chatStatus && !this.state.isLoading && <p>Chat Offline</p>}
+        {this.state.error && <p>Failed to load, please refresh to try again.</p>}
 
-        <PhoneInput name="phone"
-          country={'us'}
-          placeholder={this.state.formControls.phone.placeholder}
-          value={this.state.phone}
-          onChange={phone => this.setState({ phone })}
-          touched={this.state.formControls.phone.touched}
-          valid={this.state.formControls.phone.valid}
-        />
+        <form disabled={this.state.isLoading || !this.state.chatStatus}>
+          
+          <Name name="name" disabled={this.state.isLoading || !this.state.chatStatus}
+            placeholder={this.state.formControls.name.placeholder}
+            value={this.state.formControls.name.value}
+            onChange={this.changeHandler}
+            touched={this.state.formControls.name.touched}
+            valid={this.state.formControls.name.valid}
+          />
 
-        <Email name="email"
-          placeholder={this.state.formControls.email.placeholder}
-          value={this.state.formControls.email.value}
-          onChange={this.changeHandler}
-          touched={this.state.formControls.email.touched}
-          valid={this.state.formControls.email.valid}
-        />
+          <PhoneInput name="phone" disabled={this.state.isLoading || !this.state.chatStatus}
+            country={'us'}
+            placeholder={this.state.formControls.phone.placeholder}
+            value={this.state.phone}
+            onChange={phone => this.setState({ phone })}
+            touched={this.state.formControls.phone.touched}
+            valid={this.state.formControls.phone.valid}
+          />
 
-        <Select name="department" disabled selected
-          placeholder={this.state.formControls.department.placeholder}
-          value={this.state.formControls.department.value}
-          onChange={this.changeHandler}
-          options={this.state.formControls.department.options}
-          touched={this.state.formControls.department.touched}
-          valid={this.state.formControls.department.valid}
-        />
+          <Email name="email" disabled={this.state.isLoading || !this.state.chatStatus}
+            placeholder={this.state.formControls.email.placeholder}
+            value={this.state.formControls.email.value}
+            onChange={this.changeHandler}
+            touched={this.state.formControls.email.touched}
+            valid={this.state.formControls.email.valid}
+          />
 
-        <button id="startChatButton"
-          onClick={this.startChat}
-         /* onClick={this.formSubmitHandler}
-          onClick={this.formSendDataToChat}
-          onClick={this.formSendProactiveInvitation}*/
-          disabled={!this.state.formIsValid}
-        >
-          <span>
-            Start Chat
-          </span>
+          <Select name="department" disabled selected disabled={this.state.isLoading || !this.state.chatStatus}
+            placeholder={this.state.formControls.department.placeholder}
+            value={this.state.formControls.department.value}
+            onChange={this.changeHandler}
+            options={this.state.formControls.department.options}
+            touched={this.state.formControls.department.touched}
+            valid={this.state.formControls.department.valid}
+          />
 
-        </button>
+          <button type="submit" id="startChatButton" disabled={!this.state.formIsValid || this.state.isLoading || !this.state.chatStatus}
+            onClick={this.startChat}
+          >
+            <span disabled={!this.state.formIsValid || this.state.isLoading || !this.state.chatStatus}>
+              Start Chat
+            </span>
+          </button>
 
-        {this.state.showError && <div id="startChatButtonError">
-          <span id="errorMessageChatOffline">
-          We're currently offline. Please try again later.
-          </span>
-        </div>}
-
+          {this.state.showError && <div id="startChatButtonError">
+            <span id="errorMessageChatOffline">
+              We're currently offline. Please try again later.
+            </span>
+          </div>}
+        </form>
       </div>
-    );
+    )
   }
 }
 

@@ -9,9 +9,9 @@ const Name = props => {
     }
 
     return (
-        <div className="form-group">
-            <input type="text" className={formControl} {...props} />
-        </div>
+     <div className="form-group">
+        <input type="text" className={formControl} {...props} />
+     </div>
     );
 }
 
