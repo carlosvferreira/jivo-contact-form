@@ -142,7 +142,7 @@ class App extends Component {
 
   async componentDidMount() {
     try {
-      const status = await fetch("http://node136.jivosite.com/widget/status/497422/ZLM6UIaTWf")
+      const status = await fetch("//node136.jivosite.com/widget/status/497422/ZLM6UIaTWf")
       const response = await status.json()
       const isOnline = Boolean(response.agents && response.agents.length)
 
