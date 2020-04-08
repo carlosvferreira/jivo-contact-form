@@ -15,7 +15,7 @@ class App extends Component {
 
     this.state = {
       chatStatus: false,
-      error: false,
+      loadingError: false,
       isLoading: true,
       showError: false,
       formIsValid: false,
@@ -23,40 +23,41 @@ class App extends Component {
 
         name: {
           value: '',
-          placeholder: 'Name',
-          valid: "false",
+          placeholder: 'Name*',
+          valid: false,
           validationRules: {
             minLength: 4,
             isRequired: true
           },
-          touched: "false"
+          touched: false
         },
         phone: {
           value: '',
           placeholder: 'Phone number',
-          valid: "true",
-          touched: "true"
+          valid: true,
+          touched: true
         },
         email: {
           value: '',
-          placeholder: 'Email',
-          valid: "false",
+          placeholder: 'Email*',
+          valid: false,
           validationRules: {
             isRequired: true,
             isEmail: true
           },
-          touched: "false"
+          touched: false
         },
         department: {
           value: '',
           placeholder: 'Department',
-          valid: "false",
-          touched: "true",
+          valid: false,
+          touched: true,
           validationRules: {
             isRequired: true,
           },
+          touched: false,
           options: [
-            { value: '', displayValue: 'Select a Department' },
+            { value: '', displayValue: 'Select a Department*' },
             { value: 'support', displayValue: 'Support' },
             { value: 'sales', displayValue: 'Sales' }
           ]
@@ -80,7 +81,7 @@ class App extends Component {
       ...updatedControls[name]
     };
     updatedFormElement.value = value;
-    updatedFormElement.touched = "true";
+    updatedFormElement.touched = true;
     updatedFormElement.valid = validate(value, updatedFormElement.validationRules);
 
     updatedControls[name] = updatedFormElement;
@@ -128,7 +129,8 @@ class App extends Component {
   }
 
   startChat = () => {
-    if (this.state.chatStatus) {  
+
+    if (this.state.chatStatus) {
       this.formSubmitHandler()
       this.formSendProactiveInvitation()
     }
@@ -138,6 +140,7 @@ class App extends Component {
       window.jivo_init()
     }
     else {this.setState({...this.state, chatStatus: false, isLoading: true, error: true})}
+
   }
 
   async componentDidMount() {
@@ -160,11 +163,11 @@ class App extends Component {
 
       <div className="App">
 
-        {this.state.isLoading && <p>Loading, please wait</p>}
-        {!this.state.chatStatus && !this.state.isLoading && <p>Chat Offline</p>}
-        {this.state.error && <p>Failed to load, please refresh to try again.</p>}
+        {this.state.isLoading && <p id="loadingMessage">Loading, please wait</p>}
+        {!this.state.chatStatus && !this.state.isLoading && <p id="offlineChat">We're currently offline. Please try again later.</p>}
+        {this.state.loadingError && <p id="failMessage">Failed to load, please refresh to try again.</p>}
 
-        <form disabled={this.state.isLoading || !this.state.chatStatus}>
+        <form id="chatForm" disabled={this.state.isLoading || !this.state.chatStatus}>
           
           <Name name="name" disabled={this.state.isLoading || !this.state.chatStatus}
             placeholder={this.state.formControls.name.placeholder}
@@ -173,6 +176,8 @@ class App extends Component {
             touched={this.state.formControls.name.touched}
             valid={this.state.formControls.name.valid}
           />
+
+          {!this.state.formControls.name.valid && this.state.formControls.name.touched && <p className="invalid-field-message">Please insert at least 4 characters</p>}
 
           <PhoneInput name="phone" disabled={this.state.isLoading || !this.state.chatStatus}
             country={'us'}
@@ -191,6 +196,8 @@ class App extends Component {
             valid={this.state.formControls.email.valid}
           />
 
+          {!this.state.formControls.email.valid && this.state.formControls.email.touched && <p className="invalid-field-message">Please insert a valid email address</p>}
+
           <Select name="department" disabled selected disabled={this.state.isLoading || !this.state.chatStatus}
             placeholder={this.state.formControls.department.placeholder}
             value={this.state.formControls.department.value}
@@ -200,7 +207,9 @@ class App extends Component {
             valid={this.state.formControls.department.valid}
           />
 
-          <button type="submit" id="startChatButton" disabled={!this.state.formIsValid || this.state.isLoading || !this.state.chatStatus}
+          {!this.state.formControls.department.valid && this.state.formControls.department.touched && <p className="invalid-field-message">Please select a department</p>}
+
+          <button type="button" id="startChatButton" disabled={!this.state.formIsValid || this.state.isLoading || !this.state.chatStatus}
             onClick={this.startChat}
           >
             <span disabled={!this.state.formIsValid || this.state.isLoading || !this.state.chatStatus}>

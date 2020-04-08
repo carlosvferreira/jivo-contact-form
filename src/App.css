@@ -37,15 +37,20 @@
   }
 }
 
-form {
-  width: 100%;
-  height: 100%;
+p {
+  height: 2em;
+  padding: 3px;
+  line-height: inherit;
+  vertical-align: middle;
+  text-align: center;
+  text-align-last: center;
+  line-height: inherit;
+  
 }
 
-.form-control {
-  width: 50%;
-  border: 2px solid #ccc;
-  padding: 15px; 
+#chatForm {
+  width: 100%;
+  height: 100%;
 }
 
 .form-control {
@@ -54,9 +59,22 @@ form {
   font-size: 100%;
   box-sizing: border-box;
   border: 3px solid #CACACA;
+  padding: 15px;
 }
 
-.react-tel-input{
+.field-valid {
+  border: 3px solid rgb(126, 224, 134) !important;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+input:focus, select:focus {
+  box-shadow: none;
+}
+
+.react-tel-input {
   width: 100% !important;
   height: 15% !important;
   margin-top: 5px;
@@ -81,13 +99,18 @@ button {
   background-color: #222;
   padding: 17px 60px;
   margin: auto;
-  margin-top: 5%;
-  box-shadow: 0 5px 15px rgba(189, 25, 25, 0.2);
+  margin-top: 4%;
+  margin-bottom: 5%;
+  box-shadow: 0 5px 15px rgba(92, 89, 89, 0.2);
 }
 
 button span {
   position: relative; 
-  z-index: 3;
+  z-index: 1;
+}
+
+button:enabled {
+  box-shadow: 0px 4px rgb(50, 50, 51);
 }
 
 button:enabled:after {
@@ -102,16 +125,14 @@ button:enabled:after {
   transition: all .5s ease-in-out;
   -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
   transform: translateX(-98%) translateY(-18%) rotate(45deg);
-  z-index: 10;
 }
 
-button:enabled:after:hover {
+button:enabled:hover:after {
   -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
   transform: translateX(-9%) translateY(-25%) rotate(45deg);
 }
 
-button:enabled {
-  box-shadow: 0px 4px rgb(28, 13, 61);
+button:active {
   transform: translateY(2px);
 }
 
@@ -122,6 +143,8 @@ button:disabled {
 button:disabled:hover {
   background: grey;
 }
+
+/*Open Jivo on full screen mode*/
 
 jdiv .label_39 {
   display: none !important
@@ -158,8 +181,46 @@ textarea.inputField_2G:focus {
   width: 100% !important;
 }
 
+/*End of Jivo code*/
+
 .control-error {
-  border: 2px solid red;
+  border: 2px solid red !important;
+}
+
+#offlineChat {
+  font-weight: bold;
+  width: 70%;
+  font-size: 1em;
+  color: rgb(68, 58, 59);
+  background-color: rgb(214, 100, 100);
+  margin-left: 15%;
+  margin-right: 15%;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+#failMessage {
+  font-weight: bold;
+  width: 70%;
+  font-size: 1em;
+  color: rgb(68, 58, 59);
+  background-color: rgb(214, 100, 100);
+  margin-left: 15%;
+  margin-right: 15%;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+#loadingMessage {
+  font-weight: bold;
+  width: 70%;
+  font-size: 1em;
+  color: rgb(68, 58, 59);
+  background-color: rgb(174, 194, 152);
+  margin-left: 15%;
+  margin-right: 15%;
+  border-radius: 10px;
+  overflow: auto;
 }
 
 #startChatButtonError {
@@ -175,9 +236,22 @@ textarea.inputField_2G:focus {
   margin-left: 15%;
   margin-right: 15%;
   border-radius: 25px;
+  overflow: auto
 }
 
 #errorMessageChatOffline {
   display:block;
   padding-top: 4px;
+}
+
+.invalid-field-message {
+  font-weight: bold;
+  width: 70%;
+  font-size: 1em;
+  color: rgb(68, 58, 59);
+  background-color: rgb(214, 100, 100);
+  margin-left: 15%;
+  margin-right: 15%;
+  border-radius: 10px;
+  overflow: auto;
 }
