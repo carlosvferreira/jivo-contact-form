@@ -109,6 +109,24 @@ class App extends Component {
 
   }
 
+  //Real-time auto-formatter for names inserted in the form
+
+  formNameFormatter = () => {
+
+    var userName = this.state.formControls.name.value.split(" ")
+    var userNameSplit = userName.map(function (namePart) {
+      if (namePart.length <=2) {return namePart.toLowerCase()};
+      return namePart.charAt(0).toUpperCase() + namePart.substring(1).toLowerCase()
+    })
+
+    var userNameFormatted = userNameSplit.join(" ")
+
+    return userNameFormatted
+
+  }
+
+  //Sends contact data to the Jivo app in real-time
+
   formSendDataToChat = () => {
 
     window.jivo_api.setContactInfo(
@@ -121,12 +139,17 @@ class App extends Component {
     );
   }
 
+  //Sends a proactive invitation on form submit with client's first name on it
+
   formSendProactiveInvitation = () => {
 
     var clientName = window.jivo_api.getContactInfo().client_name;
-    window.jivo_api.showProactiveInvitation('Hello, dear ' + clientName + '! How can I help you today?')
+    var clientFirstName = clientName.split(" ")[0]
+    window.jivo_api.showProactiveInvitation('Hello, dear ' + clientFirstName + '! How can I help you today?')
 
   }
+
+  //Starts a chat with the website owner on Jivo app
 
   startChat = () => {
 
@@ -142,6 +165,8 @@ class App extends Component {
     else {this.setState({...this.state, chatStatus: false, isLoading: true, error: true})}
 
   }
+
+  //Checks the status of the chat (online or offline) and enable/disable the form based on the result
 
   async componentDidMount() {
     try {
@@ -171,7 +196,7 @@ class App extends Component {
           
           <Name name="name" disabled={this.state.isLoading || !this.state.chatStatus}
             placeholder={this.state.formControls.name.placeholder}
-            value={this.state.formControls.name.value}
+            value={this.formNameFormatter(this.state.formControls.name.value)}
             onChange={this.changeHandler}
             touched={this.state.formControls.name.touched}
             valid={this.state.formControls.name.valid}
