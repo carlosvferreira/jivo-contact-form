@@ -14,6 +14,7 @@ Cool features:
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 Projects used to help build this web app:
 https://www.npmjs.com/package/react-phone-input-2
+
 https://medium.com/@agoiabeladeyemi/the-complete-guide-to-forms-in-react-d2ba93f32825
 
 ### How to run it
@@ -24,4 +25,5 @@ https://medium.com/@agoiabeladeyemi/the-complete-guide-to-forms-in-react-d2ba93f
 
 ## Author
 Carlos Eduardo da Veiga Ferreira
+
 https://www.linkedin.com/in/carlos-eduardo-da-veiga-ferreira-13288a70/
