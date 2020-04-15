@@ -18,7 +18,6 @@ const validate = (value, rules) => {
   return isValid;
 }
 
-
 /**
  * minLength Val
  * @param  value 
@@ -30,7 +29,7 @@ const minLengthValidator = (value, minLength) => {
 }
 
 /**
- * Check to confirm that feild is required
+ * Check to confirm that field is required
  * 
  * @param  value 
  * @return       
@@ -47,9 +46,7 @@ const requiredValidator = value => {
  */
 const emailValidator = value => {
   var re = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(value).toLowerCase());
+  return re.test(String(value));
 }
-
-
 
 export default validate;

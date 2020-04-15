@@ -9,10 +9,8 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
 class App extends Component {
-
   constructor() {
     super();
-
     this.state = {
       chatStatus: false,
       loadingError: false,
@@ -25,11 +23,11 @@ class App extends Component {
           value: '',
           placeholder: 'Name*',
           valid: false,
+          touched: false,
           validationRules: {
-            minLength: 4,
+            minLength: 3,
             isRequired: true
-          },
-          touched: false
+          }
         },
         phone: {
           value: '',
@@ -41,45 +39,42 @@ class App extends Component {
           value: '',
           placeholder: 'Email*',
           valid: false,
+          touched: false,
           validationRules: {
             isRequired: true,
             isEmail: true
-          },
-          touched: false
+          }
         },
         department: {
           value: '',
           placeholder: 'Department',
           valid: false,
-          touched: true,
+          touched: false,
           validationRules: {
             isRequired: true,
           },
-          touched: false,
           options: [
             { value: '', displayValue: 'Select a Department*' },
             { value: 'support', displayValue: 'Support' },
             { value: 'sales', displayValue: 'Sales' }
           ]
         }
-
       }
-
     }
-
   }
 
   changeHandler = event => {
-
     const name = event.target.name;
     const value = event.target.value;
 
     const updatedControls = {
       ...this.state.formControls
     };
+
     const updatedFormElement = {
       ...updatedControls[name]
     };
+
     updatedFormElement.value = value;
     updatedFormElement.touched = true;
     updatedFormElement.valid = validate(value, updatedFormElement.validationRules);
@@ -93,11 +88,8 @@ class App extends Component {
 
     this.setState({
       formControls: updatedControls,
-      formIsValid: formIsValid
+      formIsValid: formIsValid,
     });
-
-    this.formSendDataToChat()
-
   }
 
   formSubmitHandler = () => {
@@ -106,35 +98,40 @@ class App extends Component {
       formData[formElementId] = this.state.formControls[formElementId].value;
     }
     console.dir(formData);
-
   }
 
   //Real-time auto-formatter for names inserted in the form
 
   formNameFormatter = () => {
-
-    var userName = this.state.formControls.name.value.split(" ")
-    var userNameSplit = userName.map(function (namePart) {
-      if (namePart.length <=2) {return namePart.toLowerCase()};
-      return namePart.charAt(0).toUpperCase() + namePart.substring(1).toLowerCase()
+    let userName = this.state.formControls.name.value.split(" ")
+    let userNameSplit = userName.map(function (namePart) {
+      let name = namePart.length <= 2 ? namePart.toLowerCase() : namePart.charAt(0).toUpperCase() + namePart.substring(1).toLowerCase()
+      return name
     })
+    let userNameFormatted = userNameSplit.join(" ")
+    this.state.formControls.name.value = userNameFormatted
+    return this.state.formControls.name.value
+  }
 
-    var userNameFormatted = userNameSplit.join(" ")
+  //Real-time auto-formatter for emails inserter in the form
 
-    return userNameFormatted
-
+  formEmailFormatter = () => {
+    if (this.state.formControls.email && this.state.formControls.email.value.includes("@")) {
+      let [first, second] = this.state.formControls.email.value.split("@")
+      return `${first}@${second.toLowerCase()}`
+    }   
+    return this.state.formControls.email.value
   }
 
   //Sends contact data to the Jivo app in real-time
 
   formSendDataToChat = () => {
-
     window.jivo_api.setContactInfo(
       {
         name: this.state.formControls.name.value,
         email: this.state.formControls.email.value,
-        phone: this.state.formControls.phone.value,
-        description: ''
+        phone: this.state.phone,
+        description: `${this.state.formControls.name.value.split(" ")[0]} has selected the ${this.state.formControls.department.value} department`
       }
     );
   }
@@ -142,18 +139,16 @@ class App extends Component {
   //Sends a proactive invitation on form submit with client's first name on it
 
   formSendProactiveInvitation = () => {
-
-    var clientName = window.jivo_api.getContactInfo().client_name;
-    var clientFirstName = clientName.split(" ")[0]
+    let clientName = window.jivo_api.getContactInfo().client_name;
+    let clientFirstName = clientName.split(" ")[0]
     window.jivo_api.showProactiveInvitation('Hello, dear ' + clientFirstName + '! How can I help you today?')
-
   }
 
   //Starts a chat with the website owner on Jivo app
 
   startChat = () => {
-
     if (this.state.chatStatus) {
+      this.formSendDataToChat()
       this.formSubmitHandler()
       this.formSendProactiveInvitation()
     }
@@ -163,7 +158,6 @@ class App extends Component {
       window.jivo_init()
     }
     else {this.setState({...this.state, chatStatus: false, isLoading: true, error: true})}
-
   }
 
   //Checks the status of the chat (online or offline) and enable/disable the form based on the result
@@ -204,7 +198,7 @@ class App extends Component {
 
           {!this.state.formControls.name.valid && this.state.formControls.name.touched && <p className="invalid-field-message">Please insert at least 4 characters</p>}
 
-          <PhoneInput name="phone" disabled={this.state.isLoading || !this.state.chatStatus}
+          <PhoneInput name="phone" class="flag-dropdown" disabled={this.state.isLoading || !this.state.chatStatus}
             country={'us'}
             placeholder={this.state.formControls.phone.placeholder}
             value={this.state.phone}
@@ -215,7 +209,7 @@ class App extends Component {
 
           <Email name="email" disabled={this.state.isLoading || !this.state.chatStatus}
             placeholder={this.state.formControls.email.placeholder}
-            value={this.state.formControls.email.value}
+            value={this.formEmailFormatter(this.state.formControls.email.value)}
             onChange={this.changeHandler}
             touched={this.state.formControls.email.touched}
             valid={this.state.formControls.email.valid}
@@ -223,7 +217,7 @@ class App extends Component {
 
           {!this.state.formControls.email.valid && this.state.formControls.email.touched && <p className="invalid-field-message">Please insert a valid email address</p>}
 
-          <Select name="department" disabled selected disabled={this.state.isLoading || !this.state.chatStatus}
+          <Select name="department" selected disabled={this.state.isLoading || !this.state.chatStatus}
             placeholder={this.state.formControls.department.placeholder}
             value={this.state.formControls.department.value}
             onChange={this.changeHandler}
