@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -45,7 +46,7 @@ p {
   text-align: center;
   text-align-last: center;
   line-height: inherit;
-  
+
 }
 
 #chatForm {
@@ -93,7 +94,8 @@ p {
   box-shadow: none;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   box-shadow: none;
 }
 
@@ -119,7 +121,7 @@ button {
 }
 
 button span {
-  position: relative; 
+  position: relative;
   z-index: 1;
 }
 
@@ -161,60 +163,53 @@ button:disabled:hover {
 
 /*Open Jivo on full screen mode*/
 
-jdiv .label_39 {
+jdiv#jvlabelWrap {
+  display: none !important;
+}
+
+.__jivoMobileButton {
   display: none !important
 }
 
-.globalClass_ET jdiv .__jivoMobileButton{
-  display: none !important
+.header_056 {
+  left: 0 !important;
 }
 
-.header_2u {
-  position: static !important;
-}
-
-.avatar_2c {
-  padding-left: 10px !important;
-}
-
-.main_2l {
+#jcont,
+.body_815 {
   width: 100% !important;
   height: 100% !important;
   margin: 0 !important;
   right: 0% !important;
 }
 
-jdiv textarea.inputField_2G {
+jdiv textarea.inputField_062 {
   min-width: -webkit-fill-available !important;
   width: -webkit-fill-available !important;
 }
 
-textarea.inputField_2G:focus {
+jdiv textarea.inputField_062:focus {
   min-width: 100% !important;
 }
 
-.input_6h {
+.input_784 {
   width: 100% !important;
   min-width: -webkit-fill-available !important;
 }
 
-.popup_1H {
+.popup_661 {
   width: -webkit-fill-available !important;
 }
 
-.body_2s {
-  width: 100% !important;
-}
-
-.content_oc {
+.content_ef9 {
   max-width: 45% !important;
 }
 
-.content_3B {
+.content_656 {
   max-width: 45% !important;
 }
 
-jdiv.text_14, .withEditText__r {
+jdiv.text_5db {
   font-size: 17px !important;
 }
 
@@ -252,7 +247,7 @@ jdiv.text_14, .withEditText__r {
   width: 70%;
   font-size: 1em;
   color: rgb(68, 58, 59);
-  background-color: rgb(174, 194, 152);
+  background-color: rgb(193, 196, 150);
   margin-left: 15%;
   margin-right: 15%;
   border-radius: 10px;
@@ -274,7 +269,7 @@ jdiv.text_14, .withEditText__r {
 }
 
 #errorMessageChatOffline {
-  display:block;
+  display: block;
   padding-top: 4px;
 }
 
